@@ -1,25 +1,24 @@
 import { Router } from 'express';
+import {
+    createComponent,
+    getAllComponents,
+    getComponentById,
+    updateComponent,
+    deleteComponent
+} from '../controllers/components.controller';
+import { authMiddleware } from '../middleware/auth.middleware';
+import { validate } from '../middleware/validate.middleware';
+import { createComponentSchema, updateComponentSchema } from '../validators/component.schemas';
 
 const router = Router();
 
-router.get('/', (_req, res) => {
-    res.json({ message: 'get all components' });
-});
+// Public routes
+router.get('/', getAllComponents);
+router.get('/:id', getComponentById);
 
-router.get('/:id', (_req, res) => {
-    res.json({ message: 'get one component' });
-});
-
-router.post('/', (_req, res) => {
-    res.json({ message: 'create component' });
-});
-
-router.put('/:id', (_req, res) => {
-    res.json({ message: 'update component' });
-});
-
-router.delete('/:id', (_req, res) => {
-    res.json({ message: 'delete component' });
-});
+// Protected routes
+router.post('/', authMiddleware, validate(createComponentSchema), createComponent);
+router.put('/:id', authMiddleware, validate(updateComponentSchema), updateComponent);
+router.delete('/:id', authMiddleware, deleteComponent);
 
 export default router;

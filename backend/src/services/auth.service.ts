@@ -1,13 +1,7 @@
 import { pool } from '../config/db';
 import { hashPassword, comparePassword } from '../utils/password';
 import { signAccessToken } from '../utils/jwt';
-
-class ApiError extends Error {
-    constructor(public statusCode: number, message: string) {
-        super(message);
-        this.name = 'ApiError';
-    }
-}
+import { ApiError } from '../utils/ApiError';
 
 const registerUser = async (data: any) => {
     const { username, email, password } = data;
